@@ -1,7 +1,7 @@
 package org.example.dao;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import org.example.Session;
+import org.example.dto.Session;
 import org.example.config.WorkloggerProperties;
 
 import java.sql.*;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SessionDao {
-    private MysqlDataSource sessionDS;
+    private final MysqlDataSource sessionDS;
 
     public SessionDao() {
         sessionDS = new MysqlDataSource();
@@ -24,7 +24,7 @@ public class SessionDao {
         return sessionDS.getConnection();
     }
 
-    public void startSession(String project) throws SQLException {
+    public void startSession(String project, String notes) throws SQLException {
         String sql = "INSERT INTO sessions (id, project, start_time, end_time) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

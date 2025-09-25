@@ -11,9 +11,9 @@ public class ConsoleUI {
     private final SessionDao sessionDao;
     private boolean running;
 
-    public ConsoleUI(Scanner scanner, SessionDao sessionDao) {
-        this.scanner = scanner;
-        this.sessionDao = sessionDao;
+    public ConsoleUI() {
+        this.scanner = new Scanner(System.in);
+        this.sessionDao = new SessionDao();
     }
 
     public void start() throws SQLException {
@@ -34,7 +34,9 @@ public class ConsoleUI {
                 case 1:
                     System.out.println("Project: ");
                     String project = scanner.nextLine();
-                    sessionDao.startSession(project);
+                    System.out.println("Notes (optional): ");
+                    String notes = scanner.nextLine();
+                    sessionDao.startSession(project, notes);
                     break;
                 case 2:
                     sessionDao.stopSession();
