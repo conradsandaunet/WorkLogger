@@ -42,6 +42,9 @@ public class ConsoleUI {
                     sessionDao.stopSession();
                     break;
                 case 3:
+                    if (sessionDao.getAllSessions().isEmpty()) {
+                        System.out.println("No sessions logged.");
+                    }
                     sessionDao.getAllSessions().forEach(System.out::println);
                     break;
                 case 4:

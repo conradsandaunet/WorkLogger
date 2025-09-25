@@ -25,20 +25,25 @@ public class SessionDao {
     }
 
     public void startSession(String project, String notes) throws SQLException {
-        String sql = "INSERT INTO sessions (id, project, start_time, end_time) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO sessions (project, start_time, end_time, notes) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            String id = java.util.UUID.randomUUID().toString();
             Timestamp startTime = new Timestamp(System.currentTimeMillis());
 
-            stmt.setString(1, id);
-            stmt.setString(2, project);
-            stmt.setTimestamp(3, startTime);
-            stmt.setTimestamp(4, null);
+            stmt.setString(1, project);
+            stmt.setTimestamp(2, startTime);
+            stmt.setTimestamp(3, null);
+            stmt.setString(4, notes);
+
 
             stmt.executeUpdate();
-            System.out.println("Session started for project: " + project + " (id=" + id + ")");
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    System.out.println("Session started for project: " + project + " (id=" + id + ")");
+                }
+            }
         }
     }
 
@@ -70,7 +75,7 @@ public class SessionDao {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                String id = rs.getString("id");
+                int id = rs.getInt("id");
                 String project = rs.getString("project");
                 Timestamp start_time = rs.getTimestamp("start_time");
                 Timestamp end_time = rs.getTimestamp("end_time");

@@ -5,13 +5,13 @@ import java.util.UUID;
 
 public class Session {
 
-    private String id = UUID.randomUUID().toString();
+    private int id;
     private final String project;
     private final Timestamp startTime;
     private final Timestamp endTime;
     private final String notes;
 
-    public Session(String id, String project, Timestamp startTime, Timestamp endTime, String notes) {
+    public Session(int id, String project, Timestamp startTime, Timestamp endTime, String notes) {
         this.id = id;
         this.project = project;
         this.startTime = startTime;
