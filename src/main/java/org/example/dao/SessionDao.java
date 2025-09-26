@@ -100,5 +100,22 @@ public class SessionDao {
         }
         return 0;
     }
+
+    public long getTimeWorkedOnProject(String project) throws SQLException {
+        String sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, start_time, end_time)) AS total_seconds "
+                + "FROM sessions WHERE project = ?";
+        try (Connection connection = getConnection();
+        PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, project);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getLong("total_seconds");
+            }
+            return 0;
+        }
+    }
+
+
 }
 

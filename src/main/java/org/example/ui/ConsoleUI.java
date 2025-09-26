@@ -20,12 +20,13 @@ public class ConsoleUI {
         running = true;
 
         while (running) {
-            System.out.println("\nWorkLogger Menu");
+            System.out.println("\n=== WorkLogger Menu ===");
             System.out.println("1. Start session.");
             System.out.println("2. Stop session.");
             System.out.println("3. Get all sessions.");
             System.out.println("4. Total time worked.");
-            System.out.println("0. Exit");
+            System.out.println("5. Total time worked on a project.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -52,6 +53,14 @@ public class ConsoleUI {
                     long hours = totalSeconds / 3600;
                     long minutes = (totalSeconds % 3600) / 60;
                     System.out.println("Total time: " + hours + "h " + minutes + "m");
+                    break;
+                case 5:
+                    System.out.println("Project: ");
+                    String projectName = scanner.nextLine();
+                    long projectSeconds = sessionDao.getTimeWorkedOnProject(projectName);
+                    long projectHours = projectSeconds / 3600;
+                    long projectMinutes = (projectSeconds % 3600) / 60;
+                    System.out.println("Time worked on project '" + projectName + "': " + projectHours + "h " + projectMinutes + "m");
                     break;
                 case 0:
                     System.out.println("Quitting...");
